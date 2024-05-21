@@ -1,10 +1,12 @@
 import express, { NextFunction, Request, Response } from "express"
 import bodyParser from 'body-parser';
+import { ProductsRoutes } from "./modules/student/ECommerce.route";
 
 const app = express()
 
 app.use(bodyParser.json());
 app.use(express.json());
+app.use('/api/products', ProductsRoutes)
 
 // app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 //   console.error(err);
