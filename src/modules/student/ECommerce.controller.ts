@@ -17,6 +17,21 @@ const createProducts = async (req: Request<{}, {}, EProducts>, res: Response): P
     }
 };
 
+const getAllProducts = async (req: Request<{}, {}, EProducts>, res: Response): Promise<void> => {
+    const productData = req.body;
+
+    try {
+        const result = await productsServices.getAllProducts(productData);
+        res.json({
+            success: true,
+            message: "Products fetched successfully!",
+            data: result,
+        });
+    } catch (error) {
+        console.log(error)
+    }
+};
+
 export const productsControllers = {
-    createProducts,
+    createProducts, getAllProducts
 };

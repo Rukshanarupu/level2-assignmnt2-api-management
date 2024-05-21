@@ -5,7 +5,11 @@ const createProducts= async (payLoad: EProducts)=>{
     const result=await Products.create(payLoad)
     return result
 }
+const getAllProducts= async (payLoad: EProducts)=>{
+    const result=await Products.find(payLoad)
+    return result
+}
 
 export const productsServices={
-    createProducts
+    createProducts, getAllProducts,
 }
