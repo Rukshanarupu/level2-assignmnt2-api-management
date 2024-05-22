@@ -15,14 +15,13 @@ const getProductById= async (id: string)=>{
     return result
 }
 const updateProduct = async (id: string, updateData: EProducts) => {
+    // const {name, price, category, inventory}=updateData
     if (!Types.ObjectId.isValid(id)) {
         throw new Error('Invalid product ID');
     }
-
-    const result = await Products.findOneAndUpdate({_id:id}, { $set: updateData }, { new: true });
+    const result = await Products.findByIdAndUpdate(id, { $set: updateData }, { new: true });
     return result;
 };
-// db.test.updateOne({ "_id" : ObjectId("6406ad63fc13ae5a40000069")},{$set:{age:70}})
 
 const deleteProductById= async (id: string)=>{
     const result=await Products.findByIdAndDelete(id)
@@ -30,7 +29,15 @@ const deleteProductById= async (id: string)=>{
 }
 
 const searchProducts = async (searchTerm: string) => {
-    const result = await Products.find({ $text: { $search: searchTerm } });
+    const regex = new RegExp(searchTerm, 'i'); 
+    const result = await Products.find({
+        $or: [
+            { name: { $regex: regex } },
+            { description: { $regex: regex } },
+            { tags: { $in: [regex] } },
+        ]
+    });
+    // const result = await Products.find({ $text: { $search: searchTerm } });
     return result;
 };
 

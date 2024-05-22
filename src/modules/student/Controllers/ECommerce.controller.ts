@@ -82,8 +82,15 @@ const deleteProductById = async (req: Request, res: Response) => {
 const searchProducts = async (req: Request, res: Response)=> {
     const { searchTerm } = req.query as { searchTerm: string };
 
+    if (!searchTerm) {
+        return res.status(400).json({
+            success: false,
+            message: "Search term is required",
+        });
+    }
+
     try {
-        const result = await productsServices.searchProducts(searchTerm);
+        const result = await productsServices.searchProducts(searchTerm as string);
         res.json({
             success: true,
             message: `Products matching search term '${searchTerm}' fetched successfully!`,
