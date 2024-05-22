@@ -6,7 +6,7 @@ import { orderSchema } from "../Validators/orderValidator";
 
 const createOrders = async (req: Request, res: Response) => {
     const { error } = validateRequest(req.body, orderSchema);
-    // if (error) return res.status(400).json({ success: false, message: error.details[0].message });
+    if (error) return res.status(400).json({ success: false, message: error.details[0].message });
     const orderData = req.body;
 
     try {

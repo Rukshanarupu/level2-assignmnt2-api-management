@@ -11,16 +11,17 @@ app.use(express.json());
 app.use('/api/products', ProductsRoutes)
 app.use('/api/orders', OrderRoutes)
 
-app.use((req, res) => {
-  res.status(404).json({ success: false, message: 'Route not found' });
-});
 
-app.use((err: any, req: any, res: any, next: any) => {
-  res.status(500).json({ success: false, message: err.message });
-});
+// app.use((err: any, req: any, res: any, next: any) => {
+//   res.status(500).json({ success: false, message: err.message });
+// });
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello Next!");
 })
+
+// app.use((req, res) => {
+//   res.status(404).json({ success: false, message: 'Route not found' });
+// });
 
 export default app

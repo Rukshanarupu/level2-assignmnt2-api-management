@@ -5,9 +5,9 @@ import { productSchema } from "../Validators/productValidator";
 
 const createProducts = async (req: Request, res: Response) => {
     const { error } = validateRequest(req.body, productSchema);
-    // if (error) return res.status(400).json({ success: false, message: error.details[0].message });
-    const productData = req.body;
+    if (error) return res.status(400).json({ success: false, message: error.details[0].message });
 
+    const productData = req.body;
     try {
         const result = await productsServices.createProducts(productData);
         res.json({
