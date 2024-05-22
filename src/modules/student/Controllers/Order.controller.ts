@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { orderServices } from "../Services/Order.services";
 import { validateRequest } from "../errorHandler";
 import { orderSchema } from "../Validators/orderValidator";
-import { productsServices } from "../Services/ECommerce.services";
 
 const createOrders = async (req: Request, res: Response) => {
     const { error } = validateRequest(req.body, orderSchema);
