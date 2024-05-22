@@ -1,17 +1,23 @@
-import express, { NextFunction, Request, Response } from "express"
+import express, { Request, Response } from "express"
 import bodyParser from 'body-parser';
-import { ProductsRoutes } from "./modules/student/ECommerce.route";
+import { ProductsRoutes } from "./modules/student/Routes/ECommerce.route";
+import { OrderRoutes } from "./modules/student/Routes/Order.route";
 
 const app = express()
 
 app.use(bodyParser.json());
 app.use(express.json());
+// app.use(cors())
 app.use('/api/products', ProductsRoutes)
+app.use('/api/orders', OrderRoutes)
 
-// app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-//   console.error(err);
-//   res.status(400).send('Bad Request');
-// });
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: 'Route not found' });
+});
+
+app.use((err: any, req: any, res: any, next: any) => {
+  res.status(500).json({ success: false, message: err.message });
+});
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello Next!");

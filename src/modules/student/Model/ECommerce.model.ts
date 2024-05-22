@@ -1,5 +1,5 @@
-import { Schema, model, connect } from 'mongoose';
-import { EInventory, EProducts, EVariants } from './ECommerce.interface';
+import { Schema, model } from 'mongoose';
+import { EInventory, EProducts, EVariants } from '../ECommerce.interface';
 
 const  variantSchema = new Schema<EVariants>({
     type: { type: String, required: true },

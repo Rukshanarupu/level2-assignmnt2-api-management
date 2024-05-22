@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
-import { EProducts } from "./ECommerce.interface";
-import { productsServices } from "./ECommerce.services";
+import { productsServices } from "../Services/ECommerce.services";
+import { validateRequest } from "../errorHandler";
+import { productSchema } from "../Validators/productValidator";
 
-const createProducts = async (req: Request<{}, {}, EProducts>, res: Response) => {
+const createProducts = async (req: Request, res: Response) => {
+    const { error } = validateRequest(req.body, productSchema);
+    // if (error) return res.status(400).json({ success: false, message: error.details[0].message });
     const productData = req.body;
 
     try {
@@ -14,6 +17,7 @@ const createProducts = async (req: Request<{}, {}, EProducts>, res: Response) =>
         });
     } catch (error) {
         console.log(error)
+        // res.status(500).json({ success: false, message: error.message });
     }
 };
 
@@ -75,6 +79,24 @@ const deleteProductById = async (req: Request, res: Response) => {
     }
 };
 
-export const productsControllers = {
-    createProducts, getAllProducts, getProductById, updateProduct, deleteProductById
+const searchProducts = async (req: Request, res: Response)=> {
+    const { searchTerm } = req.query as { searchTerm: string };
+
+    try {
+        const result = await productsServices.searchProducts(searchTerm);
+        res.json({
+            success: true,
+            message: `Products matching search term '${searchTerm}' fetched successfully!`,
+            data: result,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
 };
+
+export const productsControllers = {
+    createProducts, getAllProducts, getProductById, updateProduct, deleteProductById, searchProducts
+};
+
+
