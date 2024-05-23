@@ -1,4 +1,4 @@
-import { Types } from "mongoose"
+// import { Types } from "mongoose"
 import { EProducts } from "../ECommerce.interface"
 import { Products } from "../Model/ECommerce.model"
 
@@ -14,33 +14,47 @@ const getProductById= async (id: string)=>{
     const result=await Products.findById(id)
     return result
 }
-const updateProduct = async (id: string, updateData: EProducts) => {
-    // const {name, price, category, inventory}=updateData
-    if (!Types.ObjectId.isValid(id)) {
-        throw new Error('Invalid product ID');
-    }
-    const result = await Products.findByIdAndUpdate(id, { $set: updateData }, { new: true });
-    return result;
-};
+// const updateProduct = async (productId: string, updateData: EProducts) => {
+//     if (!Types.ObjectId.isValid(productId)) {
+//         throw new Error('Invalid product ID');
+//     }
+//     console.log('id:', productId);
+//     console.log('Data in service:', updateData);
+//     const result = await Products.findByIdAndUpdate(productId, { $set: updateData }, { new: true });
+//     console.log(result)
+//     return result;
+// };
 
 const deleteProductById= async (id: string)=>{
     const result=await Products.findByIdAndDelete(id)
     return result
 }
 
+// const searchProducts = async (searchTerm: string) => {
+//     // const regex = new RegExp(searchTerm, 'i'); 
+//     // const result = await Products.find({
+//     //     $or: [
+//     //         { name: { $regex: regex } },
+//     //         { category: { $regex: regex } },
+//     //         { price: { $regex: regex } }
+//     //     ]
+//     // });
+//     const result = await Products.find({
+//         name: { $regex: new RegExp(`^${searchTerm}$`, "i") },
+//       });
+//     console.log(result)
+//     return result;
+// };
+
 const searchProducts = async (searchTerm: string) => {
-    const regex = new RegExp(searchTerm, 'i'); 
+    console.log("Search term:", searchTerm);
     const result = await Products.find({
-        $or: [
-            { name: { $regex: regex } },
-            { description: { $regex: regex } },
-            { tags: { $in: [regex] } },
-        ]
+        $text: { $search: searchTerm }
     });
-    // const result = await Products.find({ $text: { $search: searchTerm } });
     return result;
 };
 
 export const productsServices={
-    createProducts, getAllProducts, getProductById, updateProduct, deleteProductById, searchProducts,
+    createProducts, getAllProducts, getProductById,  deleteProductById, 
+    searchProducts,
 }

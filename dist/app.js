@@ -13,13 +13,10 @@ app.use(express_1.default.json());
 // app.use(cors())
 app.use('/api/products', ECommerce_route_1.ProductsRoutes);
 app.use('/api/orders', Order_route_1.OrderRoutes);
-app.use((req, res) => {
-    res.status(404).json({ success: false, message: 'Route not found' });
-});
-app.use((err, req, res, next) => {
-    res.status(500).json({ success: false, message: err.message });
-});
 app.get("/", (req, res) => {
-    res.send("Hello Next!");
+    res.send("Hello world");
 });
+// app.use((req, res) => {
+//   res.status(404).json({ success: false, message: 'Route not found' });
+// });
 exports.default = app;

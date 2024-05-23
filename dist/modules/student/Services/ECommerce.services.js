@@ -24,20 +24,37 @@ const getProductById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield ECommerce_model_1.Products.findById(id);
     return result;
 });
-const updateProduct = (id, updateData) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!mongoose_1.Types.ObjectId.isValid(id)) {
+const updateProduct = (productId, updateData) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!mongoose_1.Types.ObjectId.isValid(productId)) {
         throw new Error('Invalid product ID');
     }
-    const result = yield ECommerce_model_1.Products.findOneAndUpdate({ _id: id }, { $set: updateData }, { new: true });
+    console.log('id:', productId);
+    console.log('Data in service:', updateData);
+    const result = yield ECommerce_model_1.Products.findByIdAndUpdate(productId, { $set: updateData }, { new: true });
+    console.log(result);
     return result;
 });
-// db.test.updateOne({ "_id" : ObjectId("6406ad63fc13ae5a40000069")},{$set:{age:70}})
 const deleteProductById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield ECommerce_model_1.Products.findByIdAndDelete(id);
     return result;
 });
+// const searchProducts = async (searchTerm: string) => {
+//     const regex = new RegExp(searchTerm, 'i'); 
+//     const result = await Products.find({
+//         $or: [
+//             { name: { $regex: regex } },
+//             { category: { $regex: regex } },
+//             { price: { $regex: regex } }
+//         ]
+//     });
+//     // const result = await Products.find({ $text: { $search: searchTerm } });
+//     return result;
+// };
 const searchProducts = (searchTerm) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield ECommerce_model_1.Products.find({ $text: { $search: searchTerm } });
+    console.log("Search term:", searchTerm);
+    const result = yield ECommerce_model_1.Products.find({
+        $text: { $search: searchTerm }
+    });
     return result;
 });
 exports.productsServices = {

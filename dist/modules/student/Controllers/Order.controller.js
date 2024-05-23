@@ -9,13 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.orderControllers = exports.getOrderByEmail = void 0;
+exports.orderControllers = void 0;
 const Order_services_1 = require("../Services/Order.services");
 const errorHandler_1 = require("../errorHandler");
 const orderValidator_1 = require("../Validators/orderValidator");
 const createOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { error } = (0, errorHandler_1.validateRequest)(req.body, orderValidator_1.orderSchema);
-    // if (error) return res.status(400).json({ success: false, message: error.details[0].message });
+    if (error) {
+        return (res.status(400).json({
+            success: false,
+            message: error.details[0].message
+        }));
+    }
     const orderData = req.body;
     try {
         const order = yield Order_services_1.orderServices.createOrders(orderData);
@@ -57,7 +62,6 @@ const getOrderByEmail = (req, res) => __awaiter(void 0, void 0, void 0, function
         console.log(error);
     }
 });
-exports.getOrderByEmail = getOrderByEmail;
 exports.orderControllers = {
-    createOrders, getAllOrders, getOrderByEmail: exports.getOrderByEmail
+    createOrders, getAllOrders, getOrderByEmail
 };

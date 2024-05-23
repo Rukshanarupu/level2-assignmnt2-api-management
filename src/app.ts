@@ -12,11 +12,11 @@ app.use('/api/products', ProductsRoutes)
 app.use('/api/orders', OrderRoutes)
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello Next!");
+  res.send("Hello world");
 })
 
-app.use((req, res) => {
-  res.status(404).json({ success: false, message: 'Route not found' });
-});
+// app.use((req, res) => {
+//   res.status(404).json({ success: false, message: 'Route not found' });
+// });
 
 export default app

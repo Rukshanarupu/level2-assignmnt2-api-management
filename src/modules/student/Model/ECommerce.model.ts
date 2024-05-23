@@ -21,4 +21,7 @@ const productsSchema = new Schema<EProducts>({
     inventory: inventorySchema
 });
 
+
+// productsSchema.index({ name: 'text', category: 'text' });
+
 export const Products = model<EProducts>('Products', productsSchema);

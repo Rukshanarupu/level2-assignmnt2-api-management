@@ -19,4 +19,5 @@ const productsSchema = new mongoose_1.Schema({
     variants: [variantSchema],
     inventory: inventorySchema
 });
+productsSchema.index({ name: 'text', category: 'text' });
 exports.Products = (0, mongoose_1.model)('Products', productsSchema);
