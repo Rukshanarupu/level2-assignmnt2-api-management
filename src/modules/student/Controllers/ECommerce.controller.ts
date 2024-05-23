@@ -4,6 +4,7 @@ import { validateRequest } from "../errorHandler";
 import { productSchema } from "../Validators/productValidator";
 import { Products } from "../Model/ECommerce.model";
 import { EProducts } from "../ECommerce.interface";
+import { ParamsDictionary } from "express-serve-static-core";
 
 const createProducts = async (req: Request, res: Response) => {
     const { error } = validateRequest(req.body, productSchema);
@@ -111,35 +112,36 @@ const getProductById = async (req: Request, res: Response) => {
 //     }
 // };
 
-const updateProduct = async (req: Request<any, Partial<EProducts>>, res: Response): Promise<void> => {
-    try {
-        const productId: string = req.params["productId"];
-        const updatedData: Partial<EProducts> = req.body;
-        console.log(productId)
-        console.log(updatedData)
-        const updatedProduct: EProducts | null = await Products.findByIdAndUpdate(productId, { $set: updatedData }, {new:true});
+// const updateProduct = async (req: Request, res: Response): Promise<void> => {
+//     try {
+//         const {productId}= req.params;
+//         const updatedData = req.body;
+//         console.log(productId)
+//         console.log(updatedData)
+//         const updatedProduct= await Products.findByIdAndUpdate(productId, updatedData, {new:true});
         
-        console.log(updatedProduct)
-        if (!updatedProduct) {
-          res.status(404).json({
-            success: false,
-            message: "Product not found",
-          });
-          return;
-        } 
-        res.status(200).json({
-          success: true,
-          message: "Product updated successfully!",
-          data: updatedProduct,
-        });
-      } catch (error) {
-        res.status(500).json({
-          success: false,
-          message: "Failed to update product",
-          error: (error as Error).message,
-        });
-      }
-};
+//         console.log("Updated Product:", updatedProduct);
+//         if (!updatedProduct) {
+//           res.status(404).json({
+//             success: false,
+//             message: "Product not found",
+//           });
+//           return;
+//         } 
+//         res.status(200).json({
+//           success: true,
+//           message: "Product updated successfully!",
+//           data: updatedProduct,
+//         });
+//       } catch (error) {
+//         res.status(500).json({
+//           success: false,
+//           message: "Failed to update product",
+//           error: (error as Error).message,
+//         });
+//       }
+// };
+
 
 const deleteProductById = async (req: Request, res: Response) => {
     const { productId } = req.params;
@@ -174,7 +176,43 @@ const deleteProductById = async (req: Request, res: Response) => {
 // };
 
 export const productsControllers = {
-    createProducts, getAllProducts, getProductById, updateProduct, deleteProductById
+    createProducts, getAllProducts, getProductById, deleteProductById,
+    async updateProductById(
+        req: Request<ParamsDictionary, any, Partial<EProducts>>,
+        res: Response
+      ): Promise<void> {
+        try {
+          const productId: string = req.params["productId"];
+          const updatedProductData: Partial<EProducts> = req.body;
+    
+          console.log(productId)
+          console.log(updatedProductData)
+          const updatedProduct: EProducts | null =
+            await Products.findByIdAndUpdate(productId, updatedProductData, {
+              new: true,
+            });
+            console.log(updatedProduct)
+          if (!updatedProduct) {
+            res.status(404).json({
+              success: false,
+              message: "Product not found",
+            });
+            return;
+          }
+    
+          res.status(200).json({
+            success: true,
+            message: "Product updated successfully!",
+            data: updatedProduct,
+          });
+        } catch (error) {
+          res.status(500).json({
+            success: false,
+            message: "Failed to update product",
+            error: (error as Error).message,
+          });
+        }
+      }
 };
 
 
